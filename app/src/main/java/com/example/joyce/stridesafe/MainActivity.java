@@ -13,3 +13,5 @@ public class MainActivity extends AppCompatActivity {
         // sah dude
     }
 }
+
+//rishab's voice cracks every 2 seconds
