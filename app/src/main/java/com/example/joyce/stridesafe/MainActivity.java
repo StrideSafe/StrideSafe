@@ -15,12 +15,32 @@ public class MainActivity extends AppCompatActivity {
         // sah dude
         // IIW IIS
     }
-
-    public void Map(View view) {
-        Intent intent = new Intent(this, MapTest.class);
-
-        startActivity(intent);
+    public void goHelp(View view)
+    {
+        Intent intentHelp = new Intent(this, HelpActivity.class);
+        startActivity(intentHelp);
     }
+
+    public void goInformation(View view) {
+        Intent intentInfo = new Intent(this, goInformation.class);
+        startActivity(intentInfo);
+    }
+
+    public void goSettings(View view) {
+        Intent intentSettings = new Intent(this, SettingsActivity.class);
+        startActivity(intentSettings);
+    }
+
+    public void goContacts(View view) {
+        Intent intentContacts = new Intent(this, ContactsActivity.class);
+        startActivity(intentContacts);
+    }
+
+    public void goDecisions(View view) {
+        Intent intentDecisions = new Intent(this, DecisionsActivity.class);
+        startActivity(intentDecisions);
+    }
+
 }
 
 //rishab's voice cracks every 2 seconds
