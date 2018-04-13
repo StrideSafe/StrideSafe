@@ -11,9 +11,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Hi, this is my comment.........
-        // sah dude
-        // IIW IIS
     }
     public void goHelp(View view)
     {
@@ -42,5 +39,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-//rishab's voice cracks every 2 seconds
