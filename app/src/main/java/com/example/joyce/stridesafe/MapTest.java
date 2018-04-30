@@ -28,10 +28,8 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
         OnMyLocationClickListener, OnMapReadyCallback {
 
-    private static final LatLng LOWER_MANHATTAN = new LatLng(40.722543,
-            -73.998585);
-    private static final LatLng TIMES_SQUARE = new LatLng(40.7577, -73.9857);
-    private static final LatLng BROOKLYN_BRIDGE = new LatLng(40.7057, -73.9964);
+    private static final LatLng NU_CAFE = new LatLng(42.2627, -71.8265);
+    private static final LatLng HOPE_CEMETARY = new LatLng(42.2362, -71.8270);
 
 
     private GoogleMap mMap;
@@ -169,12 +167,10 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
         mMap
                 .addPolyline((new PolylineOptions())
-                        .add(TIMES_SQUARE, BROOKLYN_BRIDGE, LOWER_MANHATTAN,
-                                TIMES_SQUARE).width(5).color(Color.BLUE)
+                        .add(NU_CAFE,HOPE_CEMETARY).width(5).color(Color.BLUE)
                         .geodesic(true));
         // move camera to zoom on map
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LOWER_MANHATTAN,
-                13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(NU_CAFE, 13));
     }
 
 }

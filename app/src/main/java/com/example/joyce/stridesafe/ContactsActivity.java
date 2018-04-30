@@ -100,7 +100,7 @@ public class ContactsActivity extends AppCompatActivity {
             contactNum1.setText("Contact Number: " + contactNumber);
         else if(num2.matches(""))
             contactNum2.setText("Contact Number: " + contactNumber);
-        else if(num1.matches(""))
+        else if(num3.matches(""))
             contactNum3.setText("Contact Number: " + contactNumber);
 
     }
