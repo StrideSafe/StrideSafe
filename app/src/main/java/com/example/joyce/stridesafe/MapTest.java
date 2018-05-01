@@ -173,4 +173,6 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(NU_CAFE, 13));
     }
 
+
+
 }
