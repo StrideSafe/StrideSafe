@@ -2,12 +2,14 @@ package com.example.joyce.stridesafe;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.icu.text.DecimalFormat;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,8 +42,7 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
         Log.d("Map Entry", "I have entered the onCreate Method");
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_test);
+        super.onCreate(savedInstanceState);setContentView(R.layout.activity_map_test);
 
         // Initializing array List
         markerPoints = new ArrayList<LatLng>();
@@ -174,5 +175,28 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     }
 
 
+
+    public void CalculationByDistance(View view) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = Prescott_A.latitude;
+        double lat2 = Prescott_B.latitude;
+        double lon1 = Prescott_A.longitude;
+        double lon2 = Prescott_B.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        Double valueResult = Radius * c;
+        valueResult = valueResult * 3280.84; // KM To FEET
+//        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
+//                + " Meter   " + meterInDec);
+        
+        String dist = valueResult.toString();
+        Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
+
+    }
 
 }
