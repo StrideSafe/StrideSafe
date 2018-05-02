@@ -1,8 +1,11 @@
 package com.example.joyce.stridesafe;
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.icu.text.DecimalFormat;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -21,7 +24,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MapTest extends FragmentActivity implements OnMyLocationButtonClickListener,
@@ -197,6 +203,29 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         String dist = valueResult.toString();
         Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
 
+    }
+
+    public LatLng getLocationFromAddress(String strAddress) {
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            // May throw an IOException
+            List<Address> addresses = geocoder.getFromLocationName(strAddress, 1);
+            Address address = addresses.get(0);
+
+            if (addresses.size() > 0) {
+                double latitude = addresses.get(0).getLatitude();
+                double longitude = addresses.get(0).getLongitude();
+                LatLng p1 = new LatLng(latitude, longitude);
+                return p1;
+            }
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
+        }
+        return null;
     }
 
 }
