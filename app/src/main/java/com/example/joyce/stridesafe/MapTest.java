@@ -1,41 +1,53 @@
 package com.example.joyce.stridesafe;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.icu.text.DecimalFormat;
 import android.location.Location;
+import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationClickListener;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class MapTest extends FragmentActivity implements OnMyLocationButtonClickListener,
-
-
-
-        OnMyLocationClickListener, OnMapReadyCallback {
+        OnMapReadyCallback {
 
     private static final LatLng Prescott_A = new LatLng(42.27385542588484, -71.79915435938568);
     private static final LatLng Prescott_B = new LatLng(42.27907885741453, -71.7996264281723);
 
-
     private GoogleMap mMap;
     ArrayList<LatLng> markerPoints;
+    int mapLocation = 0;
+    private LocationRequest mLocationRequest;
+
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,110 +83,137 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
 
 
-
         boolean check = checkLocationPermission();
-
         if(!check){
-
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
         }
 
         mMap.setMyLocationEnabled(true);
 
         mMap.setOnMyLocationButtonClickListener(this);
 
-        mMap.setOnMyLocationClickListener(this);
         setUpMap();
+        getLastLocation();
+        startLocationUpdates();
     }
 
     public boolean checkLocationPermission() {
-
         String permission = "android.permission.ACCESS_FINE_LOCATION";
-
         int res = this.checkCallingOrSelfPermission(permission);
-
         return (res == PackageManager.PERMISSION_GRANTED);
-
     }
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-
         switch (requestCode) {
-
             case 1: {
-
                 // If request is cancelled, the result arrays are empty.
-
-                if (grantResults.length > 0
-
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-
-                } else {
-
-                    // permission denied, boo! Disable the
-
-                    // functionality that depends on this permission.
-
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 }
-
+                else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
                 return;
-
             }
-
         }
-
     }
-
-    @Override
 
     public void onMyLocationClick(@NonNull Location location) {
-
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
-
     }
 
-
-
     @Override
-
     public boolean onMyLocationButtonClick() {
-
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-
         // Return false so that we don't consume the event and the default behavior still occurs
-
         // (the camera animates to the user's current position).
-
         return false;
+    }
 
+    // Trigger new location updates at interval
+    protected void startLocationUpdates() {
+
+        // Create the location request to start receiving updates
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        boolean check = checkLocationPermission();
+        if (!check) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        // do work here
+                        onLocationChanged(locationResult.getLastLocation());
+                    }
+                },
+                Looper.myLooper());
+    }
+
+    public void onLocationChanged(Location location) {
+        // New location has now been determined
+        String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLongitude());
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public void getLastLocation() {
+        // Get last known recent location using new Google Play Services SDK (v11+)
+        FusedLocationProviderClient locationClient = getFusedLocationProviderClient(this);
+        boolean check = checkLocationPermission();
+        if (!check) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        locationClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // GPS location can be null if GPS is switched off
+                        if (location != null) {
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            onLocationChanged(location);
+                            Log.d("mapActivity", "New Location Coordinates: " + latLng);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("mapActivity", "Error trying to get last GPS location");
+                        e.printStackTrace();
+                    }
+                });
     }
 
     private void setUpMap() {
-        // check if we have got the googleMap already
-      //  if (mMap == null) {
-      //      mMap = ((SupportMapFragment) getSupportFragmentManager()
-      //              .findFragmentById(R.id.map)).getMapAsync(this);
-            if (mMap != null) {
-                addLines();
-            }
-
-            //      mMap.setOnCameraChangeListener(this);
+        if(mMap !=null) {
+            addLines();
         }
-
-    private void addLines() {
-
-        mMap
-                .addPolyline((new PolylineOptions())
-                        .add(Prescott_A,Prescott_B).width(5).color(Color.BLUE)
-                        .geodesic(true));
-        // move camera to zoom on map
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Prescott_A, 13));
     }
 
-
+    private void addLines() {
+        mMap.addPolyline((new PolylineOptions()).add(Prescott_A, Prescott_B).width(5).color(Color.BLUE).geodesic(true));
+        // move camera to zoom on map
+        float zoomLevel = 16.0f; //This goes up to 21
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Prescott_A, zoomLevel));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Prescott_A, 13));
+    }
 
     public void CalculationByDistance(View view) {
         int Radius = 6371;// radius of earth in Km
@@ -191,12 +230,8 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         double c = 2 * Math.asin(Math.sqrt(a));
         Double valueResult = Radius * c;
         valueResult = valueResult * 3280.84; // KM To FEET
-//        Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec
-//                + " Meter   " + meterInDec);
-        
+        //Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec + " Meter   " + meterInDec);
         String dist = valueResult.toString();
         Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
-
-    }
-
+        }
 }
