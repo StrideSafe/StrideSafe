@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.joyce.stridesafe.R;
-
 public class ContactsActivity extends AppCompatActivity {
 
     private static final String TAG = ContactsActivity.class.getSimpleName();
