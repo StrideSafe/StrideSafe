@@ -3,6 +3,8 @@ package com.example.joyce.stridesafe;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -30,7 +32,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
@@ -233,5 +238,29 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         //Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec + " Meter   " + meterInDec);
         String dist = valueResult.toString();
         Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
+    }
+
+    public LatLng getLocationFromAddress(String strAddress) {
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            // May throw an IOException
+            List<Address> addresses = geocoder.getFromLocationName(strAddress, 1);
+            Address address = addresses.get(0);
+
+            if (addresses.size() > 0) {
+                double latitude = addresses.get(0).getLatitude();
+                double longitude = addresses.get(0).getLongitude();
+                LatLng p1 = new LatLng(latitude, longitude);
+                return p1;
+            }
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
         }
+        return null;
+    }
+
 }
