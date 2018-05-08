@@ -101,6 +101,11 @@ public class ContactsActivity extends AppCompatActivity {
         else if(num3.matches(""))
             contactNum3.setText("Contact Number: " + contactNumber);
 
+        Intent intent = new Intent(this, HelpActivity.class);
+        intent.putExtra("firstNum", num1);
+        intent.putExtra("secNum", num2);
+        intent.putExtra("answer", num3);
+
     }
 
     private void retrieveContactName() {

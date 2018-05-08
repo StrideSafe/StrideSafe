@@ -214,6 +214,12 @@ mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
         Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Base code/advice from https://stackoverflow.com/questions/9698328/how-to-get-coordinates-of-an-address-in-android
+     * @param strAddress
+     * @return latlng points
+     */
+
     public LatLng getLocationFromAddress(String strAddress) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
