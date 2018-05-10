@@ -2,17 +2,22 @@
 package com.example.joyce.stridesafe;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ContactsActivity extends AppCompatActivity {
-
+    public static String num1a;
+    public static String num2a;
+    public static String num3a;
     private static final String TAG = ContactsActivity.class.getSimpleName();
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
     private Uri uriContact;
@@ -32,7 +37,21 @@ public class ContactsActivity extends AppCompatActivity {
 
         // using native contacts selection
         // Intent.ACTION_PICK = Pick an item from the data, returning what was selected.
-        startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            //request permission from user if the app hasn't got the required permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.READ_CONTACTS},   //request specific permission from user
+                    10);
+            return;
+        }else {     //have got permission
+            try{
+                startActivityForResult(new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI), REQUEST_CODE_PICK_CONTACTS);
+            }
+            catch (android.content.ActivityNotFoundException ex){
+                Toast.makeText(getApplicationContext(),"yourActivity is not founded",Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
     @Override
@@ -88,24 +107,39 @@ public class ContactsActivity extends AppCompatActivity {
         TextView contactNum1 = findViewById(R.id.contactNum1);
         String num1 = contactNum1.getText().toString();
 
+
+
         TextView contactNum2 = findViewById(R.id.contactNum2);
         String num2 = contactNum2.getText().toString();
 
         TextView contactNum3 = findViewById(R.id.contactNum3);
         String num3 = contactNum3.getText().toString();
 
-        if(num1.matches(""))
+
+
+        if(num1.matches("")) {
             contactNum1.setText("Contact Number: " + contactNumber);
-        else if(num2.matches(""))
+            num1a = contactNumber;
+        }
+        else if(num2.matches("")) {
             contactNum2.setText("Contact Number: " + contactNumber);
+            num2a= contactNumber;
+
+        }
         else if(num3.matches(""))
             contactNum3.setText("Contact Number: " + contactNumber);
+            num3a = contactNumber;
 
-        Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra("firstNum", num1);
-        intent.putExtra("secNum", num2);
-        intent.putExtra("answer", num3);
 
+    }
+
+    public void sendToMain(View view){
+        Log.d("ContactsActivity","this is the first number: " + num1a);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("firstNum", num1a);
+        intent.putExtra("secNum", num2a);
+        intent.putExtra("answer", num3a);
+        startActivity(intent);
     }
 
     private void retrieveContactName() {

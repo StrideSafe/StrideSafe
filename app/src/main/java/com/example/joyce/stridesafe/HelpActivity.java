@@ -9,46 +9,56 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 public class HelpActivity extends AppCompatActivity {
 
+    public static String a;
+    public static String b;
+    public static String c;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+
+        Bundle bundle = getIntent().getExtras();
+
+        a = bundle.getString("firstNum");
+        b = bundle.getString("secNum");
+        c = bundle.getString("answer");
 
     }
 
     public void call1(View view){
         // Get the Intent that started the activity, and extract the data
-        Bundle bundle = getIntent().getExtras();
-
-        String a = bundle.getString("firstNum");
-        onCall("a");
+        Log.d("HelpActivity","abc a is: "+a);
+              onCall(a);
     }
 
     public void call2(View view){
         // Get the Intent that started the activity, and extract the data
-        Bundle bundle = getIntent().getExtras();
-        String b = bundle.getString("secNum");
-        onCall("b");
+        Log.d("HelpActivity",b);
+              onCall(b);
     }
 
     public void call3(View view){
-        Bundle bundle = getIntent().getExtras();
-        String c = bundle.getString("answer");
-        onCall("c");
+        Log.d("HelpActivity",c);
+        onCall(c);
     }
 
-    public void onCall(String number) {
+    public void onCall (String number) {
+        Log.d("HelpActivity",number);
+        Log.d("HelpActivity","I am here" );
+        Log.d("HelpActivity",number);
         Intent callIntent = new Intent(Intent.ACTION_CALL); //use ACTION_CALL class
-        callIntent.setData(Uri.parse("tel:0800000000"));    //this is the phone number calling
+
+           callIntent.setData(Uri.parse("tel:" + number));    //this is the phone number calling
+
         //check permission
+        // NEED PERMISSION TO READ CONTACTS (BELIEVE THAT MAY BE THE SOURCE OF THE ERRORS)
         //If the device is running Android 6.0 (API level 23) and the app's targetSdkVersion is 23 or higher,
         //the system asks the user to grant approval.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
