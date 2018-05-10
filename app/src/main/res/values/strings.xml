@@ -89,4 +89,5 @@
 
     <string name="selectContacts">Select Contacts</string>
     <string name="emergencyContacts">Emergency Contacts</string>
+    <string name="StrideSafe">Stride Safe</string>
 </resources>

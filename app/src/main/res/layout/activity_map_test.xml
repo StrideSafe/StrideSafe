@@ -12,12 +12,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="670dp"
             android:onClick="CalculationByDistance"
             android:padding="10dp"
             android:paddingRight="10dp"
-            android:text="Demo Button" />
+            android:text="Get Distance" />
 
 </fragment>
 

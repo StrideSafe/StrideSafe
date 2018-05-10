@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -31,7 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +37,7 @@ import java.util.Locale;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
-public class MapTest extends FragmentActivity implements OnMyLocationButtonClickListener,
-        OnMapReadyCallback {
+public class MapTest extends FragmentActivity implements OnMyLocationButtonClickListener, OnMapReadyCallback {
 
     private static final LatLng Prescott_A = new LatLng(42.27385542588484, -71.79915435938568);
     private static final LatLng Prescott_B = new LatLng(42.27907885741453, -71.7996264281723);
@@ -54,7 +51,6 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
 
         Log.d("Map Entry", "I have entered the onCreate Method");
@@ -68,25 +64,18 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-//        setUpMapIfNeeded();
+        //setUpMapIfNeeded();
     }
 
-
-        @Override
+    @Override
     public void onMapReady(GoogleMap googleMap) {
-
         mMap = googleMap;
 
         Log.d("Map Entry", "I have entered the onMapReady Method");
-
         /* Sample Code, We may want to reference later.
-
         LatLng sydney = new LatLng(-34, 151);
-
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
-
 
         boolean check = checkLocationPermission();
         if(!check){
@@ -137,7 +126,6 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
     // Trigger new location updates at interval
     protected void startLocationUpdates() {
-
         // Create the location request to start receiving updates
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -171,11 +159,53 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     }
 
     public void onLocationChanged(Location location) {
+        //Calculating the distances between user and the path
+        boolean alert = false;
+
+        //Getting the starting, destination, and user latlong
+        double xstart = Prescott_A.latitude;
+        double ystart = Prescott_A.longitude;
+        double xdest = Prescott_B.latitude;
+        double ydest = Prescott_B.longitude;
+        double xuser = location.getLatitude();
+        double yuser = location.getLongitude();
+
+        //Calculating the slope of the path and the slope of the line perpendicular to the path from the user
+        double slopepath = (ydest-ystart)/(xdest-xstart);
+        double b = ystart-slopepath*xstart;
+        double slopeuser = -(1/slopepath);
+        double buser = yuser-slopeuser*xuser;
+
+        //Calculating the latlong of a coordinate on the path closest to the user
+        double xpath = (buser-b)/(slopepath-slopeuser);
+        double ypath = slopepath*xpath+b;
+
+        //Calculating the distance from the closest latlong to the user
+        //double distance = Math.sqrt((Math.pow((xpath-xuser),2.0))+(Math.pow((ypath-yuser),2.0)));
+        int Radius = 6371;
+        double dLat = Math.toRadians(xpath - xuser);
+        double dLon = Math.toRadians(ypath - yuser);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(xuser))
+                * Math.cos(Math.toRadians(xpath)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        Double valueResult = Radius * c;
+        valueResult = valueResult * 3280.84; // KM To FEET to Miles
+
+        String msg1 = "User distance: " + valueResult.toString();
+        Toast.makeText(this, msg1, Toast.LENGTH_SHORT).show();
+
+        if(valueResult > 250)
+        {
+            //add call or messaging
+        }
+
         // New location has now been determined
-        String msg = "Updated Location: " +
-                Double.toString(location.getLatitude()) + "," +
-                Double.toString(location.getLongitude());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        //String msg = "Updated Location: " +
+                //Double.toString(location.getLatitude()) + "," +
+                //Double.toString(location.getLongitude());
+        //Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     public void getLastLocation() {
@@ -236,12 +266,11 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         Double valueResult = Radius * c;
         valueResult = valueResult * 3280.84; // KM To FEET
         //Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec + " Meter   " + meterInDec);
-        String dist = valueResult.toString();
+        String dist = "Distance to Destination: " + valueResult.toString();
         Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
     }
 
     public LatLng getLocationFromAddress(String strAddress) {
-
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
         try {
@@ -262,5 +291,4 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         }
         return null;
     }
-
 }
