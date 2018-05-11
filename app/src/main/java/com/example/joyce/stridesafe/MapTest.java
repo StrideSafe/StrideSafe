@@ -1,6 +1,7 @@
 package com.example.joyce.stridesafe;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -198,7 +199,8 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
         if(valueResult > 250)
         {
-            //add call or messaging
+            Intent intentCall = new Intent(this, HelpActivity.class);
+            startActivity(intentCall);
         }
 
         // New location has now been determined
