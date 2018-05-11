@@ -38,6 +38,10 @@ public class HelpActivity extends AppCompatActivity {
               onCall(a);
     }
 
+
+
+
+
     public void call2(View view){
         // Get the Intent that started the activity, and extract the data
         Log.d("HelpActivity",b);
@@ -49,7 +53,7 @@ public class HelpActivity extends AppCompatActivity {
         onCall(c);
     }
 
-    public void onCall (String number) {
+    public void onCall(String number) {
         Log.d("HelpActivity",number);
         Log.d("HelpActivity","I am here" );
         Log.d("HelpActivity",number);
@@ -76,5 +80,7 @@ public class HelpActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
 }
