@@ -50,14 +50,15 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    public static ArrayList <LatLng> list = new ArrayList<LatLng>();
+    public static String loc1;
+    public static String loc2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        Log.d("Map Entry", "I have entered the onCreate Method");
-
         super.onCreate(savedInstanceState);setContentView(R.layout.activity_map_test);
 
+        Log.d("Map Entry", "I have entered the onCreate Method");
         // Initializing array List
         markerPoints = new ArrayList<LatLng>();
 
@@ -164,10 +165,10 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         boolean alert = false;
 
         //Getting the starting, destination, and user latlong
-        double xstart = Prescott_A.latitude;
-        double ystart = Prescott_A.longitude;
-        double xdest = Prescott_B.latitude;
-        double ydest = Prescott_B.longitude;
+        double xstart = list.get(0).latitude;
+        double ystart = list.get(0).longitude;
+        double xdest = list.get(1).latitude;
+        double ydest = list.get(1).longitude;
         double xuser = location.getLatitude();
         double yuser = location.getLongitude();
 
@@ -239,25 +240,38 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     }
 
     private void setUpMap() {
+
+        Bundle bundle = getIntent().getExtras();
+
+        loc1 = bundle.getString("UserStartLoc");
+        loc2 = bundle.getString("UserEndLoc");
+        LatLng start = getLocationFromAddress(loc1);
+        Log.d("MapTest","Starting LOC COORDINATES:"+start.toString());
+        LatLng end = getLocationFromAddress(loc2);
+        list.add(0, start);
+        Log.d("MapTest","STARTING POSITION IN LIST:" + list.get(0).toString());
+        list.add(1,end);
+
         if(mMap !=null) {
             addLines();
         }
     }
 
     private void addLines() {
-        mMap.addPolyline((new PolylineOptions()).add(Prescott_A, Prescott_B).width(5).color(Color.BLUE).geodesic(true));
+        mMap.addPolyline((new PolylineOptions()).add(list.get(0), list.get(1)).width(5).color(Color.BLUE).geodesic(true));
         // move camera to zoom on map
         float zoomLevel = 16.0f; //This goes up to 21
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Prescott_A, zoomLevel));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(list.get(0), zoomLevel));
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Prescott_A, 13));
+
     }
 
     public void CalculationByDistance(View view) {
         int Radius = 6371;// radius of earth in Km
-        double lat1 = Prescott_A.latitude;
-        double lat2 = Prescott_B.latitude;
-        double lon1 = Prescott_A.longitude;
-        double lon2 = Prescott_B.longitude;
+        double lat1 = list.get(0).latitude;
+        double lat2 = list.get(1).latitude;
+        double lon1 = list.get(0).longitude;
+        double lon2 = list.get(1).longitude;
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
@@ -273,7 +287,7 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     }
 
     public LatLng getLocationFromAddress(String strAddress) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(this);
 
         try {
             // May throw an IOException
