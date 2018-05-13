@@ -17,7 +17,8 @@
             android:onClick="CalculationByDistance"
             android:padding="10dp"
             android:paddingRight="10dp"
-            android:text="Get Distance" />
+            android:text="Get Distance"
+            android:visibility="visible" />
 
 </fragment>
 
