@@ -14,10 +14,6 @@ public class DecisionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_decisions);
     }
 
-    public void Map(View view) {
-        Intent intent = new Intent(this, MapTest.class);
-        startActivity(intent);
-    }
 
     public String getStartLoc(View view)
     {
@@ -41,5 +37,7 @@ public class DecisionsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapTest.class);
         intent.putExtra("UserStartLoc", address1);
         intent.putExtra("UserEndLoc", address2);
+
+        startActivity(intent);
     }
 }
