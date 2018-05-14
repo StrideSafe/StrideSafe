@@ -140,6 +140,7 @@ public class ContactsActivity extends AppCompatActivity {
         intent.putExtra("secNum", num2a);
         intent.putExtra("answer", num3a);
         startActivity(intent);
+
     }
 
     private void retrieveContactName() {

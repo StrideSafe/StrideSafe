@@ -61,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void goDecisions(View view) {
         Intent intentDecisions = new Intent(this, DecisionsActivity.class);
+        intentDecisions.putExtra("firstNum", num1);
+        intentDecisions.putExtra("secNum", num2);
+        intentDecisions.putExtra("answer", num3);
         startActivity(intentDecisions);
     }
 

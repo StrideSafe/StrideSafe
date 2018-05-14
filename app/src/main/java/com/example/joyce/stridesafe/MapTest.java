@@ -40,8 +40,6 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 public class MapTest extends FragmentActivity implements OnMyLocationButtonClickListener, OnMapReadyCallback {
 
-    private static final LatLng Prescott_A = new LatLng(42.27385542588484, -71.79915435938568);
-    private static final LatLng Prescott_B = new LatLng(42.27907885741453, -71.7996264281723);
 
     private GoogleMap mMap;
     ArrayList<LatLng> markerPoints;
@@ -54,6 +52,10 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     public static String loc1;
     public static String loc2;
 
+    public static String num1;
+    public static String num2;
+    public static String num3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);setContentView(R.layout.activity_map_test);
@@ -61,6 +63,21 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         Log.d("Map Entry", "I have entered the onCreate Method");
         // Initializing array List
         markerPoints = new ArrayList<LatLng>();
+
+        try {
+
+
+            Bundle bundle = getIntent().getExtras();
+
+            num1 = bundle.getString("firstNum");
+            num2 = bundle.getString("secNum");
+            num3 = bundle.getString("answer");
+
+            Log.d("MainActivity","the first number pls " + num1);
+
+        } catch(NullPointerException e) {
+            Toast.makeText(getApplicationContext(),"Please enter your emergency contacts",Toast.LENGTH_SHORT).show();
+        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -200,8 +217,11 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
         if(valueResult > 250)
         {
-            Intent intentCall = new Intent(this, HelpActivity.class);
-            startActivity(intentCall);
+            Intent intentHelp = new Intent(this, HelpActivity.class);
+            intentHelp.putExtra("firstNum", num1);
+            intentHelp.putExtra("secNum", num2);
+            intentHelp.putExtra("answer", num3);
+            startActivity(intentHelp);
         }
 
         // New location has now been determined
