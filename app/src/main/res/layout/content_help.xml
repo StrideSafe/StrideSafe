@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".HelpActivity"
-    tools:showIn="@layout/activity_help">
+    tools:showIn="@layout/activity_help"
+    android:background="#9AD4D6">
 
 </android.support.constraint.ConstraintLayout>
