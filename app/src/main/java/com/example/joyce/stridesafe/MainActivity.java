@@ -49,11 +49,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intentInfo);
     }
 
-    public void goSettings(View view) {
-        Intent intentSettings = new Intent(this, SettingsActivity.class);
-        startActivity(intentSettings);
-    }
-
     public void goContacts(View view) {
         Intent intentContacts = new Intent(this, ContactsActivity.class);
         startActivity(intentContacts);

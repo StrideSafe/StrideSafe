@@ -212,8 +212,8 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         Double valueResult = Radius * c;
         valueResult = valueResult * 3280.84; // KM To FEET to Miles
 
-        String msg1 = "User distance: " + valueResult.toString();
-        Toast.makeText(this, msg1, Toast.LENGTH_SHORT).show();
+        //String msg1 = "User distance: " + valueResult.toString();
+        //Toast.makeText(this, msg1, Toast.LENGTH_SHORT).show();
 
         if(valueResult > 250)
         {

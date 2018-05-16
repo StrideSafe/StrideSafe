@@ -90,4 +90,8 @@
     <string name="selectContacts">Select Contacts</string>
     <string name="emergencyContacts">Emergency Contacts</string>
     <string name="StrideSafe">Stride Safe</string>
+    <string name="Info">Welcome to Stride Safe! Stride Safe is a pedestrian safety application that tracks
+        you on your routes and contacts selected contacts when you are a certain distance off your route.
+        To get started, select emergency contacts and create a route to get going!
+    </string>
 </resources>
