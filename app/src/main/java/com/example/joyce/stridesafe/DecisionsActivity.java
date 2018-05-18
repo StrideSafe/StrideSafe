@@ -40,7 +40,7 @@ public class DecisionsActivity extends AppCompatActivity {
     /**
      * Stores the user inputted starting address as a string object
      * @param view
-     * @return
+     * @return The starting address of the user
      */
     public String getStartLoc(View view)
     {
@@ -52,7 +52,7 @@ public class DecisionsActivity extends AppCompatActivity {
     /**
      * Stores the user inputted ending address as a string object
      * @param view
-     * @return
+     * @return The ending address of the user
      */
     public String getEndLoc(View view)
     {
