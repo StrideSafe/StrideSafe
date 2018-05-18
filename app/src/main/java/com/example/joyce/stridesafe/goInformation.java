@@ -7,6 +7,10 @@ import android.view.View;
 
 public class goInformation extends AppCompatActivity {
 
+    /**
+     * Creates a screen with information about the app.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

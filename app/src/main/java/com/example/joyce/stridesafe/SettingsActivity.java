@@ -22,6 +22,11 @@ import android.view.MenuItem;
 import java.util.List;
 
 /**
+ * This activity is not used in the current version of our app. In the future it will allow the
+ * user to change UI features and customize some functionalities (radius).
+ */
+
+/**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
  * settings are split by category, with category headers shown to the left of
