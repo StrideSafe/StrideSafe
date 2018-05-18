@@ -76,7 +76,6 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
             num2 = bundle.getString("secNum");
             num3 = bundle.getString("answer");
 
-            Log.d("MainActivity","the first number pls " + num1);
 
         } catch(NullPointerException e) {
             Toast.makeText(getApplicationContext(),"Please enter your emergency contacts",Toast.LENGTH_SHORT).show();
@@ -277,14 +276,12 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
                         if (location != null) {
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             onLocationChanged(location);
-                            Log.d("mapActivity", "New Location Coordinates: " + latLng);
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("mapActivity", "Error trying to get last GPS location");
                         e.printStackTrace();
                     }
                 });
@@ -301,10 +298,8 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         loc1 = bundle.getString("UserStartLoc");
         loc2 = bundle.getString("UserEndLoc");
         LatLng start = getLocationFromAddress(loc1);
-        Log.d("MapTest","Starting LOC COORDINATES:"+start.toString());
         LatLng end = getLocationFromAddress(loc2);
         list.add(0, start);
-        Log.d("MapTest","STARTING POSITION IN LIST:" + list.get(0).toString());
         list.add(1,end);
 
         if(mMap !=null) {
@@ -343,7 +338,6 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         double c = 2 * Math.asin(Math.sqrt(a));
         Double valueResult = Radius * c;
         valueResult = valueResult * 3280.84; // KM To FEET
-        //Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec + " Meter   " + meterInDec);
         String dist = "Distance to Destination: " + valueResult.toString();
         Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
     }
