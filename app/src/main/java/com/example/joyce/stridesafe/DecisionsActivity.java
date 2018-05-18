@@ -13,6 +13,10 @@ public class DecisionsActivity extends AppCompatActivity {
     public static String num2;
     public static String num3;
 
+    /**
+     * Unpacks the bundle of contact data from the ContactsActivity and stores contact data in local variables
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,14 +31,17 @@ public class DecisionsActivity extends AppCompatActivity {
             num2 = bundle.getString("secNum");
             num3 = bundle.getString("answer");
 
-            Log.d("MainActivity","the first number pls " + num1);
-
         } catch(NullPointerException e) {
             Toast.makeText(getApplicationContext(),"Please enter your emergency contacts",Toast.LENGTH_SHORT).show();
         }
     }
 
 
+    /**
+     * Stores the user inputted starting address as a string object
+     * @param view
+     * @return
+     */
     public String getStartLoc(View view)
     {
         EditText userStart = findViewById(R.id.UserStartLoc);
@@ -42,6 +49,11 @@ public class DecisionsActivity extends AppCompatActivity {
         return address1;
     }
 
+    /**
+     * Stores the user inputted ending address as a string object
+     * @param view
+     * @return
+     */
     public String getEndLoc(View view)
     {
         EditText userEnd = findViewById(R.id.UserEndLoc);
@@ -49,6 +61,11 @@ public class DecisionsActivity extends AppCompatActivity {
         return address2;
     }
 
+    /**
+     * Bundles the addresses and contact data and sends it to the MapTest class
+     * @param view
+     * @return
+     */
     public void sendAddresses(View view)
     {
         String address1 = getStartLoc(view);
