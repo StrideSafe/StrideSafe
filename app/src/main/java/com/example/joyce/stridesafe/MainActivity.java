@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
     public static String num3;
 
     /**
-     * Unpacks the bundle with contact data to prepare to send to HelpActivity and toasts a prompt to user to enter emergency contacts
+     * Unpacks the bundle with contact data to prepare to send to HelpActivity
+     * and toasts a prompt to user to enter emergency contacts
      * @param savedInstanceState
      */
     @Override

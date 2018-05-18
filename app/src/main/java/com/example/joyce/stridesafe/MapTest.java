@@ -121,12 +121,6 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         return (res == PackageManager.PERMISSION_GRANTED);
     }
 
-    /**
-     * Tbh I don't know if this is even used anywhere.
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
@@ -143,7 +137,8 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     }
 
     /**
-     * This is here cause Iti won't let me delete it.
+     * This method had displayed a toast when the location was updated,
+     * but now it isn't used.
      * @param location
      */
     public void onMyLocationClick(@NonNull Location location) {
@@ -152,7 +147,7 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
     /**
      * When the button is clicked the camera moves to the user's location.
-     * Base code from Andrew Yuan, Idk where he got it from
+     * Base code from Andrew Yuan is edited and implemented
      * @return
      */
     @Override
@@ -164,7 +159,7 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     }
 
     /**
-     * The location is updated every 10 seconds.
+     * The user location is updated every 10 seconds.
      */
     // Trigger new location updates at interval
     protected void startLocationUpdates() {
