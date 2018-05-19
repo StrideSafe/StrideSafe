@@ -8,6 +8,10 @@ import android.view.View;
 //Gives information about Stride Safe to the user.
 public class goInformation extends AppCompatActivity {
 
+    /**
+     * Creates a screen with information about the app.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

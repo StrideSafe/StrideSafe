@@ -15,6 +15,11 @@ public class HelpActivity extends AppCompatActivity {
     public static String a;
     public static String b;
     public static String c;
+
+    /**
+     * Unpacks the bundle with the contact numbers.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,23 +33,37 @@ public class HelpActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Calls onCall for contact one when the button is pushed.
+     * @param view
+     */
     public void call1(View view){
         // Get the Intent that started the activity, and extract the data
-        Log.d("HelpActivity","abc a is: "+a);
               onCall(a);
     }
 
+    /**
+     * Calls onCall for contact two when the button is pushed.
+     * @param view
+     */
     public void call2(View view){
         // Get the Intent that started the activity, and extract the data
-        Log.d("HelpActivity",b);
               onCall(b);
     }
 
+    /**
+     * Calls onCall for contact three when the button is pushed.
+     * @param view
+     */
     public void call3(View view){
-        Log.d("HelpActivity",c);
         onCall(c);
     }
 
+    /**
+     * Initiates a phone call with the number that is given to the method.
+     * Base code from https://stackoverflow.com/questions/5230912/android-app-to-call-a-number-on-button-click
+     * @param number
+     */
     public void onCall(String number) {
         Log.d("HelpActivity",number);
         Log.d("HelpActivity","I am here" );

@@ -56,11 +56,14 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
     public static String num2;
     public static String num3;
 
+    /**
+     * Initiates the map activity, and unpacks the bundle with the contact information.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);setContentView(R.layout.activity_map_test);
 
-        Log.d("Map Entry", "I have entered the onCreate Method");
         // Initializing array List
         markerPoints = new ArrayList<LatLng>();
 
@@ -73,7 +76,6 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
             num2 = bundle.getString("secNum");
             num3 = bundle.getString("answer");
 
-            Log.d("MainActivity","the first number pls " + num1);
 
         } catch(NullPointerException e) {
             Toast.makeText(getApplicationContext(),"Please enter your emergency contacts",Toast.LENGTH_SHORT).show();
@@ -86,15 +88,14 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         //setUpMapIfNeeded();
     }
 
+    /**
+     * Checks permissions for user location and calls methods to create the map
+     * fragment.
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        Log.d("Map Entry", "I have entered the onMapReady Method");
-        /* Sample Code, We may want to reference later.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
 
         boolean check = checkLocationPermission();
         if(!check){
@@ -110,6 +111,10 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         startLocationUpdates();
     }
 
+    /**
+     * Method used to check if location permissions are given.
+     * @return a boolean specifying if permissions have been given.
+     */
     public boolean checkLocationPermission() {
         String permission = "android.permission.ACCESS_FINE_LOCATION";
         int res = this.checkCallingOrSelfPermission(permission);
@@ -131,10 +136,20 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         }
     }
 
+    /**
+     * This method had displayed a toast when the location was updated,
+     * but now it isn't used.
+     * @param location
+     */
     public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * When the button is clicked the camera moves to the user's location.
+     * Base code from Andrew Yuan is edited and implemented
+     * @return
+     */
     @Override
     public boolean onMyLocationButtonClick() {
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
@@ -143,6 +158,9 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         return false;
     }
 
+    /**
+     * The user location is updated every 10 seconds.
+     */
     // Trigger new location updates at interval
     protected void startLocationUpdates() {
         // Create the location request to start receiving updates
@@ -177,6 +195,10 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
                 Looper.myLooper());
     }
 
+    /**
+     * Calculates the perpendicular distance between the user and the path.
+     * @param location
+     */
     public void onLocationChanged(Location location) {
         //Calculating the distances between user and the path
         boolean alert = false;
@@ -210,7 +232,7 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
                 * Math.sin(dLon / 2);
         double c = 2 * Math.asin(Math.sqrt(a));
         Double valueResult = Radius * c;
-        valueResult = valueResult * 3280.84; // KM To FEET to Miles
+        valueResult = valueResult * 3280.84; // KM To FEET
 
         //String msg1 = "User distance: " + valueResult.toString();
         //Toast.makeText(this, msg1, Toast.LENGTH_SHORT).show();
@@ -231,6 +253,9 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         //Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Retrieves the user's location.
+     */
     public void getLastLocation() {
         // Get last known recent location using new Google Play Services SDK (v11+)
         FusedLocationProviderClient locationClient = getFusedLocationProviderClient(this);
@@ -246,19 +271,21 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
                         if (location != null) {
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                             onLocationChanged(location);
-                            Log.d("mapActivity", "New Location Coordinates: " + latLng);
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("mapActivity", "Error trying to get last GPS location");
                         e.printStackTrace();
                     }
                 });
     }
 
+    /**
+     * Creates the map fragment and unpacks the bundle with the starting and
+     * ending coordinates of the user's route.
+     */
     private void setUpMap() {
 
         Bundle bundle = getIntent().getExtras();
@@ -266,10 +293,8 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         loc1 = bundle.getString("UserStartLoc");
         loc2 = bundle.getString("UserEndLoc");
         LatLng start = getLocationFromAddress(loc1);
-        Log.d("MapTest","Starting LOC COORDINATES:"+start.toString());
         LatLng end = getLocationFromAddress(loc2);
         list.add(0, start);
-        Log.d("MapTest","STARTING POSITION IN LIST:" + list.get(0).toString());
         list.add(1,end);
 
         if(mMap !=null) {
@@ -277,6 +302,9 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         }
     }
 
+    /**
+     * Creates the user's straight line route.
+     */
     private void addLines() {
         mMap.addPolyline((new PolylineOptions()).add(list.get(0), list.get(1)).width(5).color(Color.BLUE).geodesic(true));
         // move camera to zoom on map
@@ -286,6 +314,10 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
 
     }
 
+    /**
+     * Calculates the distance from the starting location to the ending location.
+     * @param view
+     */
     public void CalculationByDistance(View view) {
         int Radius = 6371;// radius of earth in Km
         double lat1 = list.get(0).latitude;
@@ -301,11 +333,15 @@ public class MapTest extends FragmentActivity implements OnMyLocationButtonClick
         double c = 2 * Math.asin(Math.sqrt(a));
         Double valueResult = Radius * c;
         valueResult = valueResult * 3280.84; // KM To FEET
-        //Log.i("Radius Value", "" + valueResult + "   KM  " + kmInDec + " Meter   " + meterInDec);
         String dist = "Distance to Destination: " + valueResult.toString();
         Toast.makeText(this, dist, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Converts an address to a LatLng object.
+     * @param strAddress
+     * @return The LatLng object.
+     */
     public LatLng getLocationFromAddress(String strAddress) {
         Geocoder geocoder = new Geocoder(this);
 

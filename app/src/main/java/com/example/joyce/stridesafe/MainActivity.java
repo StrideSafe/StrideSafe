@@ -13,6 +13,11 @@ public class MainActivity extends AppCompatActivity {
     public static String num2;
     public static String num3;
 
+    /**
+     * Unpacks the bundle with contact data to prepare to send to HelpActivity
+     * and toasts a prompt to user to enter emergency contacts
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +32,16 @@ public class MainActivity extends AppCompatActivity {
             num2 = bundle.getString("secNum");
             num3 = bundle.getString("answer");
 
-            Log.d("MainActivity","the first number pls " + num1);
-
         } catch(NullPointerException e) {
             Toast.makeText(getApplicationContext(),"Please enter your emergency contacts",Toast.LENGTH_SHORT).show();
         }
 
     }
+
+    /**
+     * Changes screens from MainActivity to HelpActivity and sends the necessary contact data
+     * @param view
+     */
     public void goHelp(View view)
     {
         Log.d("MainActivity", "this is the first num " + num1);
@@ -44,16 +52,28 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intentHelp);
     }
 
+    /**
+     * Changes screens from MainActivity to goInformation
+     * @param view
+     */
     public void goInformation(View view) {
         Intent intentInfo = new Intent(this, goInformation.class);
         startActivity(intentInfo);
     }
 
+    /**
+     * Changes screens from MainActivity to ContactsActivty
+     * @param view
+     */
     public void goContacts(View view) {
         Intent intentContacts = new Intent(this, ContactsActivity.class);
         startActivity(intentContacts);
     }
 
+    /**
+     * Changes screens from MainActivity to DecisionsActivity
+     * @param view
+     */
     public void goDecisions(View view) {
         Intent intentDecisions = new Intent(this, DecisionsActivity.class);
         intentDecisions.putExtra("firstNum", num1);
