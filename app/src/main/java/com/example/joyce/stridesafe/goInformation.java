@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+//Gives information about Stride Safe to the user.
 public class goInformation extends AppCompatActivity {
 
     @Override

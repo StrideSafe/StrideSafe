@@ -13,7 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//Modified from https://gist.github.com/evandrix/7058235
 public class ContactsActivity extends AppCompatActivity {
     public static String num1a;
     public static String num2a;
@@ -33,6 +33,7 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contacts);
     }
 
+    //Gets permissions to access contacts when the "Select Contact" button is clicked.
     public void onClickSelectContact(View btnSelectContact) {
 
         // using native contacts selection
@@ -54,6 +55,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     }
 
+    //Receives permissions and starts methods to retrieve contact names and numbers.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -67,6 +69,7 @@ public class ContactsActivity extends AppCompatActivity {
         }
     }
 
+    //Gets the contact numbers.
     private void retrieveContactNumber() {
 
         String contactNumber = null;
@@ -107,25 +110,22 @@ public class ContactsActivity extends AppCompatActivity {
         TextView contactNum1 = findViewById(R.id.contactNum1);
         String num1 = contactNum1.getText().toString();
 
-
-
         TextView contactNum2 = findViewById(R.id.contactNum2);
         String num2 = contactNum2.getText().toString();
 
         TextView contactNum3 = findViewById(R.id.contactNum3);
         String num3 = contactNum3.getText().toString();
 
-
-
         if(num1.matches("")) {
             contactNum1.setText("Contact Number: " + contactNumber);
             num1a = contactNumber;
         }
+
         else if(num2.matches("")) {
             contactNum2.setText("Contact Number: " + contactNumber);
             num2a= contactNumber;
-
         }
+
         else if(num3.matches(""))
             contactNum3.setText("Contact Number: " + contactNumber);
             num3a = contactNumber;
@@ -133,6 +133,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     }
 
+    //Send the contact information to the main activity.
     public void sendToMain(View view){
         Log.d("ContactsActivity","this is the first number: " + num1a);
         Intent intent = new Intent(this, MainActivity.class);
@@ -143,6 +144,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     }
 
+    //Gets the contact name.
     private void retrieveContactName() {
 
         String contactName = null;
@@ -162,6 +164,7 @@ public class ContactsActivity extends AppCompatActivity {
 
         Log.d(TAG, "Contact Name: " + contactName);
 
+        //Set the TextViews in the contact activity to the contact information.
         TextView contactName1 = findViewById(R.id.contactName1);
         String name1 = contactName1.getText().toString();
 
